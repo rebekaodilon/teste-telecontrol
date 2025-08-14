@@ -14,7 +14,7 @@
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link" href="/clients.html">Clientes</a></li>
-        <li class="nav-item"><a class="nav-link" href="/products.html">Produtos</a></li>
+        <li class="nav-item"><a class="nav-link active" href="/products.html">Produtos</a></li>
         <li class="nav-item"><a class="nav-link" href="/orders.html">Ordens</a></li>
         <li class="nav-item"><a class="nav-link" href="/docs.html" target="_blank">Docs</a></li>
       </ul>
@@ -61,25 +61,8 @@
     </div>
   </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="assets/app.js"></script>
-<script>
-  requireAuth(); $('#btn-logout').on('click', doLogout);
-  function loadProducts(){
-    const q=$('#q-products').val()||''; const status=$('#status-products').val()||'';
-    const wmin=$('#wmin').val()||''; const wmax=$('#wmax').val()||'';
-    const qs=new URLSearchParams({q,status,warranty_min:wmin,warranty_max:wmax});
-    api('/api/products?'+qs.toString()).then(rows=>{
-      const tbody=$('#tbl-products tbody').empty();
-      rows.forEach(r=>$('<tr/>').append(`<td>${r.id}</td><td>${r.code}</td><td>${r.description}</td><td>${r.status}</td><td>${r.warranty_months}</td>`).appendTo(tbody));
-    }).catch(err=>alert(err.error||'Erro'));
-  }
-  $('#btn-refresh-products,#q-products,#status-products,#wmin,#wmax').on('input click', loadProducts);
-  $('#btn-add-product').on('click', function(){
-    api('/api/products','POST',{code:$('#p-code').val(),description:$('#p-desc').val(),status:$('#p-status').val(),warranty_months:parseInt($('#p-wm').val()||'0',10)})
-    .then(()=>{ $('#p-code,#p-desc,#p-wm').val(''); loadProducts(); }).catch(err=>alert(err.error||'Erro'));
-  });
-  $(loadProducts);
-</script>
 </body>
 </html>
