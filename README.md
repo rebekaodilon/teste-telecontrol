@@ -32,7 +32,7 @@ Aplicação de **Ordem de Serviço** desenvolvida em **PHP** com autenticação 
 
 ### Clonar o repositório
 ```bash
-git clone https://seu-repositorio.git teste-telecontrol
+git clone https://github.com/rebekaodilon/teste-telecontrol.git
 cd teste-telecontrol
 ```
 
