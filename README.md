@@ -20,9 +20,11 @@ Aplicação de **Ordem de Serviço** desenvolvida em **PHP** com autenticação 
 ├── docker-compose.yml    # Configuração do Docker
 ├── Dockerfile            # Imagem do PHP + Apache
 ├── .env                  # Variáveis de ambiente
+├── phpunit.xml.dist      # Configuração do PHPUnit
 ├── scripts/              # Scripts de migração e seed
 ├── src/                  # Código fonte (Controllers, Services, etc.)
 ├── public/               # Frontend HTML + JS
+├── tests/                # Testes unitários e de integração
 └── docs/swagger.yaml     # Documentação da API
 ```
 
