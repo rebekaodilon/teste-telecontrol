@@ -28,7 +28,7 @@ Aplicação de **Ordem de Serviço** desenvolvida em **PHP** com autenticação 
 
 ---
 
-## ⚙️ Configuração e Execução
+## Configuração e Execução
 
 ### Clonar o repositório
 ```bash
