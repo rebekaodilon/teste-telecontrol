@@ -27,7 +27,6 @@ class ClientService {
         $cpf = preg_replace('/\D/','',$cpf);
         $found = $this->repo->findByCPF($cpf);
         if ($found) return $found;
-        // address com fallback correto
         return $this->create(['name'=>$name,'cpf'=>$cpf,'address'=>($addr ?: 'Não informado')]);
     }
 

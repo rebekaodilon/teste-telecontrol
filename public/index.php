@@ -2,7 +2,6 @@
 declare(strict_types=1);
 require __DIR__ . '/../vendor/autoload.php';
 
-// === DEBUG JSON: converte qualquer erro/exceção em JSON (útil no dev) ===
 set_error_handler(function($severity,$message,$file,$line){
   http_response_code(500);
   header('Content-Type: application/json; charset=utf-8');
@@ -24,7 +23,6 @@ Env::load();
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
-// Protect API prefixes (except login/register/ping)
 $protectedPrefixes = ['/api/clients','/api/products','/api/orders'];
 $openPaths = ['/api/login','/api/register','/ping'];
 $isProtected = !in_array($path, $openPaths, true) && array_reduce($protectedPrefixes, fn($c,$p)=>$c||str_starts_with($path,$p), false);

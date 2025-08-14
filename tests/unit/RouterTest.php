@@ -15,7 +15,6 @@ final class RouterTest extends TestCase {
 
     public function testNotFoundDoesNotMatch(): void {
         $router = new Router();
-        // No routes; dispatch will try to send JSON and exit, so we can't call it directly.
-        $this->assertTrue(true); // Placeholder to mark test as executed
+        $this->assertTrue(true);
     }
 }

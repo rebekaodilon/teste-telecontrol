@@ -9,7 +9,6 @@ final class ValidatorTest extends TestCase {
     }
 
     public function testValidCPF(): void {
-        // Known valid CPFs for testing
         $this->assertTrue(Validator::isValidCPF('529.982.247-25'));
         $this->assertTrue(Validator::isValidCPF('12345678909'));
     }

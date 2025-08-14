@@ -12,14 +12,11 @@ final class OrderServiceTest extends TestCase {
         $ps = new ProductService();
         $os = new OrderService();
 
-        // Cria usuário e obtém o ID para logs
         $auth = new AuthService();
         $reg = $auth->register('Tester', 'tester@example.com', '123456');
         $this->assertNotNull($reg);
         $userId = $reg['user']['id'];
 
-        // Esses dois não são mais necessários para o create(), mas mantive o produto
-        // O cliente será resolvido via consumer_* no OrderService::create
         $product = $ps->create([
             'code' => 'P100',
             'description' => 'String Box',

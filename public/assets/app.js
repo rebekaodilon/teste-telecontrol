@@ -11,7 +11,6 @@ function setToken(t) {
     if (typeof t === 'string' && t.trim()) {
       localStorage.setItem('jwt_token', t);
     } else {
-      // evita salvar "undefined" / "null" como string
       localStorage.removeItem('jwt_token');
     }
   } catch {}
@@ -48,8 +47,6 @@ function api(path, method = 'GET', body = null) {
     headers,
     body: body ? JSON.stringify(body) : null
   }).then(async r => {
-    const text = await r.text();
-    // console.log('Resposta bruta da API:', text);
     try {
       const data = JSON.parse(text);
       if (!r.ok) throw data;

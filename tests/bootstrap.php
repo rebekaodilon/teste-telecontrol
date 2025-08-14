@@ -11,7 +11,7 @@ if (file_exists($envPath)) {
     $dotenv->safeLoad();
 }
 
-// Executa migrations (idempotente)
+// Executa migrations
 require_once $root . '/scripts/migrate.php';
 
 // Disponibiliza helper para limpar o BD entre testes

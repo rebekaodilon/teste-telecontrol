@@ -16,10 +16,8 @@ class AuthMiddleware {
     }
 
     private static function extractToken(): ?string {
-        // 1) Header Authorization
         $raw = self::getRawAuthHeader();
         if (preg_match('/Bearer\\s+(.+)/i', $raw, $m)) return trim($m[1]);
-        // 2) Querystring/POST fallback (?token=...)
         if (isset($_GET['token']) && is_string($_GET['token']) && $_GET['token'] !== '') return $_GET['token'];
         if (isset($_POST['token']) && is_string($_POST['token']) && $_POST['token'] !== '') return $_POST['token'];
         return null;
