@@ -1,0 +1,77 @@
+openapi: 3.0.3
+info:
+  title: Telecontrol OS API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /ping:
+    get:
+      summary: Healthcheck
+      responses: { '200': { description: ok } }
+  /api/login:
+    post:
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: { email: {type: string}, password: {type: string} }
+      responses: { '200': { description: token } }
+  /api/register:
+    post:
+      summary: Registrar novo usuário (retorna token)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                email: { type: string }
+                password: { type: string }
+      responses: { '201': { description: criado } }
+  /api/clients:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: Listar clientes
+      parameters: [{ in: query, name: q, schema: { type: string } }]
+    post:
+      security: [{ bearerAuth: [] }]
+  /api/clients/{id}:
+    get:
+      security: [{ bearerAuth: [] }]
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+    put:
+      security: [{ bearerAuth: [] }]
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+    delete:
+      security: [{ bearerAuth: [] }]
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+  /api/products:
+    get:
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { in: query, name: q, schema: { type: string } }
+        - { in: query, name: status, schema: { type: string, enum: [active, inactive] } }
+        - { in: query, name: warranty_min, schema: { type: integer } }
+        - { in: query, name: warranty_max, schema: { type: integer } }
+    post:
+      security: [{ bearerAuth: [] }]
+  /api/products/{id}:
+    get: { security: [{ bearerAuth: [] }], parameters: [{ name: id, in: path, required: true, schema: { type: integer } }] }
+    put: { security: [{ bearerAuth: [] }], parameters: [{ name: id, in: path, required: true, schema: { type: integer } }] }
+    delete: { security: [{ bearerAuth: [] }], parameters: [{ name: id, in: path, required: true, schema: { type: integer } }] }
+  /api/orders:
+    get: { security: [{ bearerAuth: [] }] }
+    post: { security: [{ bearerAuth: [] }] }
+  /api/orders/{id}:
+    get: { security: [{ bearerAuth: [] }], parameters: [{ name: id, in: path, required: true, schema: { type: integer } }] }
+    put: { security: [{ bearerAuth: [] }], parameters: [{ name: id, in: path, required: true, schema: { type: integer } }] }
+    delete: { security: [{ bearerAuth: [] }], parameters: [{ name: id, in: path, required: true, schema: { type: integer } }] }
+components:
+  securitySchemes:
+    bearerAuth: { type: http, scheme: bearer, bearerFormat: JWT }

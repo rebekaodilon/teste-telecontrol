@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Telecontrol - Ordens</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container">
+    <a class="navbar-brand" href="/clients.html">Telecontrol</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="/clients.html">Clientes</a></li>
+        <li class="nav-item"><a class="nav-link" href="/products.html">Produtos</a></li>
+        <li class="nav-item"><a class="nav-link" href="/orders.html">Ordens</a></li>
+        <li class="nav-item"><a class="nav-link" href="/docs.html" target="_blank">Docs</a></li>
+      </ul>
+      <button id="btn-logout" class="btn btn-outline-danger btn-sm">Sair</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container my-4">
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">Nova Ordem</div>
+        <div class="card-body">
+          <input id="o-number" class="form-control mb-2" placeholder="Número da Ordem">
+          <input id="o-date" type="date" class="form-control mb-2" placeholder="Data de Abertura">
+          <input id="o-cname" class="form-control mb-2" placeholder="Nome do Consumidor">
+          <input id="o-cpf" class="form-control mb-2" placeholder="CPF do Consumidor">
+          <input id="o-addr" class="form-control mb-2" placeholder="Endereço do Consumidor (opcional)">
+          <select id="o-product" class="form-select mb-3"></select>
+          <button id="btn-create-order" class="btn btn-success w-100">Criar</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span>Ordens</span>
+          <input id="q-orders" class="form-control form-control-sm w-25" placeholder="Buscar...">
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-sm align-middle" id="tbl-orders">
+              <thead><tr><th>ID</th><th>Número</th><th>Abertura</th><th>Cliente</th><th>Produto</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  requireAuth(); $('#btn-logout').on('click', doLogout);
+  function loadProductsForSelect(){
+    api('/api/products').then(rows=>{
+      const sel=$('#o-product').empty();
+      rows.filter(r=>r.status==='active').forEach(r=>sel.append(`<option value="${r.id}">${r.code} — ${r.description}</option>`));
+    }).catch(err=>alert(err.error||'Erro'));
+  }
+  function loadOrders(){
+    const q=$('#q-orders').val()||'';
+    api('/api/orders?q='+encodeURIComponent(q)).then(rows=>{
+      const tbody=$('#tbl-orders tbody').empty();
+      rows.forEach(r=>$('<tr/>').append(`<td>${r.id}</td><td>${r.order_number}</td><td>${r.opened_at}</td><td>${r.client_name}</td><td>${r.product_code}</td>`).appendTo(tbody));
+    }).catch(err=>alert(err.error||'Erro'));
+  }
+  $('#q-orders').on('input', loadOrders);
+  $('#btn-create-order').on('click', function(){
+    api('/api/orders','POST',{order_number:$('#o-number').val(),opened_at:$('#o-date').val(),consumer_name:$('#o-cname').val(),consumer_cpf:$('#o-cpf').val(),consumer_address:$('#o-addr').val(),product_id:parseInt($('#o-product').val()||'0',10)})
+      .then(()=>{ $('#o-number,#o-date,#o-cname,#o-cpf,#o-addr').val(''); loadOrders(); }).catch(err=>alert(err.error||'Erro'));
+  });
+  $(function(){ loadProductsForSelect(); loadOrders(); });
+</script>
+</body>
+</html>
