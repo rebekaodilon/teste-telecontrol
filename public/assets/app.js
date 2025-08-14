@@ -40,8 +40,7 @@ function api(path, method = 'GET', body = null) {
   const headers = { 'Content-Type': 'application/json' };
   if (token) headers['Authorization'] = 'Bearer ' + token;
 
-  let url = path;
-  if (token) url += (path.includes('?') ? '&' : '?') + 'token=' + encodeURIComponent(token);
+  const url = path;
 
   return fetch(url, {
     method,
@@ -49,15 +48,21 @@ function api(path, method = 'GET', body = null) {
     body: body ? JSON.stringify(body) : null
   }).then(async r => {
     const text = await r.text();
-    // console.log('api response:', text);
-    try {
-      const data = JSON.parse(text);
-      if (!r.ok) throw data;
-      return data ?? {};
-    } catch (e) {
-      alert('Erro ao processar resposta do servidor.');
-      throw e;
+
+    if (text.trim() === '') {
+      if (!r.ok) throw { status: r.status, error: r.statusText || 'Erro' };
+      return {};
     }
+
+    let data;
+    try { data = JSON.parse(text); }
+    catch {
+      if (!r.ok) throw { status: r.status, error: text || 'Erro' };
+      return { raw: text };
+    }
+
+    if (!r.ok) throw (data || { status: r.status, error: 'Erro' });
+    return data ?? {};
   });
 }
 
@@ -73,22 +78,28 @@ function loadProducts() {
   if (warranty_min) params.append('warranty_min', warranty_min);
   if (warranty_max) params.append('warranty_max', warranty_max);
 
-  api('/api/products?' + params.toString())
-    .then(products => {
-      const tbody = $('#tbl-products tbody');
-      tbody.empty();
+  const qs = params.toString();
+  const url = '/api/products' + (qs ? ('?' + qs) : '');
 
-      products.forEach(p => {
-        const row = `<tr>
-          <td>${p.id}</td>
-          <td>${p.code}</td>
-          <td>${p.description}</td>
-          <td>${p.status}</td>
-          <td>${p.warranty_months}</td>
-        </tr>`;
-        tbody.append(row);
+  api(url)
+    .then(products => {
+      const tbody = $('#tbl-products tbody').empty();
+      (products || []).forEach(p => {
+        tbody.append(`
+          <tr>
+            <td>${p.id}</td>
+            <td>${p.code}</td>
+            <td>${p.description}</td>
+            <td>${p.status}</td>
+            <td>${p.warranty_months}</td>
+          </tr>
+        `);
       });
     })
-    .catch(err => console.error('Erro ao carregar produtos', err));
+    .catch(err => {
+      console.error('Erro ao carregar produtos', err);
+      alert(err?.error || 'Erro ao carregar produtos');
+    });
 }
+
 
