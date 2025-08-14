@@ -11,6 +11,7 @@ function setToken(t) {
     if (typeof t === 'string' && t.trim()) {
       localStorage.setItem('jwt_token', t);
     } else {
+      // evita salvar "undefined" / "null" como string
       localStorage.removeItem('jwt_token');
     }
   } catch {}
@@ -47,6 +48,8 @@ function api(path, method = 'GET', body = null) {
     headers,
     body: body ? JSON.stringify(body) : null
   }).then(async r => {
+    const text = await r.text();
+    // console.log('api response:', text);
     try {
       const data = JSON.parse(text);
       if (!r.ok) throw data;
@@ -89,37 +92,3 @@ function loadProducts() {
     .catch(err => console.error('Erro ao carregar produtos', err));
 }
 
-// Chama ao entrar na página
-$(document).ready(() => {
-  if (window.location.pathname.includes('/products.html')) {
-    requireAuth();  // se existir
-    loadProducts();
-
-    // Botão de atualizar
-    $('#btn-refresh-products').on('click', loadProducts);
-
-    // Botão de adicionar
-    $('#btn-add-product').on('click', () => {
-      const code = $('#p-code').val();
-      const description = $('#p-desc').val();
-      const status = $('#p-status').val();
-      const warranty = parseInt($('#p-wm').val());
-
-      if (!code || !description || isNaN(warranty)) {
-        alert('Preencha todos os campos');
-        return;
-      }
-
-      api('/api/products', 'POST', {
-        code, description, status, warranty_months: warranty
-      })
-        .then(() => {
-          $('#p-code').val('');
-          $('#p-desc').val('');
-          $('#p-wm').val('');
-          loadProducts(); // Recarrega lista após adicionar
-        })
-        .catch(err => alert(err.error || 'Erro ao adicionar produto'));
-    });
-  }
-});
