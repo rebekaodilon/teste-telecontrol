@@ -7,9 +7,9 @@ Aplicação de **Ordem de Serviço** desenvolvida em **PHP** com autenticação 
 - **MySQL** (via Docker)
 - **Bootstrap 5**
 - **jQuery**
-- **JWT** para autenticação
-- **Swagger** para documentação
-- **Docker Compose** para orquestração
+- **JWT**
+- **Swagger**
+- **Docker Compose**
 
 ---
 
