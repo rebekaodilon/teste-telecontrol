@@ -87,7 +87,7 @@ Senha: 123456
 
 ## Rodar testes automatizados
 ```bash
-docker compose exec app ./vendor/bin/phpunit
+docker compose exec app composer test
 ```
 
 ---
