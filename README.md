@@ -1,6 +1,6 @@
 # Teste Telecontrol
 
-Aplicação de **Ordem de Serviço** desenvolvida em **PHP puro (sem framework)** com autenticação JWT, CRUDs de clientes, produtos e ordens de serviço, proteção de rotas, logs, validações de segurança e documentação Swagger.
+Aplicação de **Ordem de Serviço** desenvolvida em **PHP** com autenticação JWT, CRUDs de clientes, produtos e ordens de serviço, proteção de rotas, logs, validações de segurança e documentação Swagger.
 
 ## Tecnologias
 - **PHP 8.3**
