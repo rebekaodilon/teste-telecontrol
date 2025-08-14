@@ -1,15 +1,15 @@
 # Teste Telecontrol
 
-Aplicação de **Ordem de Serviço** desenvolvida em **PHP puro (sem framework)** com autenticação JWT, CRUDs de clientes, produtos e ordens de serviço, proteção de rotas, logs, validações de segurança e documentação Swagger.
+Aplicação de **Ordem de Serviço** desenvolvida em **PHP** com autenticação JWT, CRUDs de clientes, produtos e ordens de serviço, proteção de rotas, logs, validações de segurança e documentação Swagger.
 
 ## Tecnologias
 - **PHP 8.3**
 - **MySQL** (via Docker)
 - **Bootstrap 5**
 - **jQuery**
-- **JWT** para autenticação
-- **Swagger** para documentação
-- **Docker Compose** para orquestração
+- **JWT**
+- **Swagger**
+- **Docker Compose**
 
 ---
 
@@ -20,19 +20,21 @@ Aplicação de **Ordem de Serviço** desenvolvida em **PHP puro (sem framework)*
 ├── docker-compose.yml    # Configuração do Docker
 ├── Dockerfile            # Imagem do PHP + Apache
 ├── .env                  # Variáveis de ambiente
+├── phpunit.xml.dist      # Configuração do PHPUnit
 ├── scripts/              # Scripts de migração e seed
 ├── src/                  # Código fonte (Controllers, Services, etc.)
 ├── public/               # Frontend HTML + JS
+├── tests/                # Testes unitários e de integração
 └── docs/swagger.yaml     # Documentação da API
 ```
 
 ---
 
-## ⚙️ Configuração e Execução
+## Configuração e Execução
 
 ### Clonar o repositório
 ```bash
-git clone https://seu-repositorio.git teste-telecontrol
+git clone https://github.com/rebekaodilon/teste-telecontrol.git
 cd teste-telecontrol
 ```
 
@@ -87,7 +89,7 @@ Senha: 123456
 
 ## Rodar testes automatizados
 ```bash
-docker compose exec app ./vendor/bin/phpunit
+docker compose exec app composer test
 ```
 
 ---
