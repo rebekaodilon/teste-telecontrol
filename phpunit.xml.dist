@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.2/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         colors="true"
+         cacheDirectory=".phpunit.cache">
+  <testsuites>
+    <testsuite name="Unit">
+      <directory>tests/unit</directory>
+    </testsuite>
+    <testsuite name="Integration">
+      <directory>tests/integration</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <env name="DB_HOST" value="mysql"/>
+    <env name="DB_PORT" value="3306"/>
+    <env name="DB_DATABASE" value="telecontrol"/>
+    <env name="DB_USERNAME" value="appuser"/>
+    <env name="DB_PASSWORD" value="appsecret"/>
+    <env name="JWT_SECRET" value="testing_secret_123"/>
+    <env name="JWT_EXP" value="3600"/>
+  </php>
+</phpunit>
