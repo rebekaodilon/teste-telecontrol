@@ -39,9 +39,7 @@ function api(path, method = 'GET', body = null) {
   const headers = { 'Content-Type': 'application/json' };
   if (token) headers['Authorization'] = 'Bearer ' + token;
 
-  const url = path;
-
-  return fetch(url, {
+  return fetch(path, {
     method,
     headers,
     body: body ? JSON.stringify(body) : null
@@ -101,4 +99,75 @@ function loadProducts() {
     });
 }
 
+// --- Produtos --- //
+function bindProductsPage() {
+  if (!window.location.pathname.endsWith('/products.html')) return;
 
+  requireAuth();
+
+  // evita duplicar handlers
+  $('#btn-logout').off('click').on('click', doLogout);
+
+  function loadProducts() {
+    const q = $('#q-products').val() || '';
+    const status = $('#status-products').val() || '';
+    const wmin = $('#wmin').val() || '';
+    const wmax = $('#wmax').val() || '';
+
+    const params = new URLSearchParams();
+    if (q) params.append('q', q);
+    if (status) params.append('status', status);
+    if (wmin) params.append('warranty_min', wmin);
+    if (wmax) params.append('warranty_max', wmax);
+
+    const url = '/api/products' + (params.toString() ? '?' + params.toString() : '');
+
+    api(url)
+      .then(products => {
+        const tbody = $('#tbl-products tbody').empty();
+        (products || []).forEach(p => {
+          tbody.append(`
+            <tr>
+              <td>${p.id}</td>
+              <td>${p.code}</td>
+              <td>${p.description}</td>
+              <td>${p.status}</td>
+              <td>${p.warranty_months}</td>
+            </tr>
+          `);
+        });
+      })
+      .catch(err => alert(err?.error || 'Erro ao listar produtos'));
+  }
+
+  $('#btn-refresh-products, #q-products, #status-products, #wmin, #wmax')
+    .off('input click')
+    .on('input click', loadProducts);
+
+  $('#btn-add-product')
+    .off('click')
+    .on('click', () => {
+      const payload = {
+        code: ($('#p-code').val() || '').trim(),
+        description: ($('#p-desc').val() || '').trim(),
+        status: $('#p-status').val(),
+        warranty_months: parseInt($('#p-wm').val() || '0', 10)
+      };
+      if (!payload.code || !payload.description || Number.isNaN(payload.warranty_months)) {
+        alert('Preencha código, descrição e garantia.');
+        return;
+      }
+      api('/api/products', 'POST', payload)
+        .then(() => {
+          $('#p-code,#p-desc,#p-wm').val('');
+          loadProducts();
+        })
+        .catch(err => alert(err?.error || 'Erro ao adicionar produto'));
+    });
+
+  loadProducts();
+}
+
+$(document).ready(() => {
+  bindProductsPage();
+});
