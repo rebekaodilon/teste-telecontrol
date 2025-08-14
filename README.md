@@ -94,23 +94,4 @@ docker compose exec app composer test
 
 ---
 
-## Endpoints principais
-
-- `POST /login` → Autenticação JWT
-- `GET /clients` → Listar clientes
-- `POST /clients` → Criar cliente
-- `PUT /clients/{id}` → Atualizar cliente
-- `DELETE /clients/{id}` → Deletar cliente
-- `GET /products` → Listar produtos
-- `POST /products` → Criar produto
-- `PUT /products/{id}` → Atualizar produto
-- `DELETE /products/{id}` → Deletar produto
-- `GET /orders` → Listar ordens
-- `POST /orders` → Criar ordem
-- `PUT /orders/{id}` → Atualizar ordem
-- `DELETE /orders/{id}` → Deletar ordem
-
----
-
-## Licença
 Este projeto foi desenvolvido para fins de teste técnico e não possui licença de uso comercial.
