@@ -11,7 +11,6 @@ function setToken(t) {
     if (typeof t === 'string' && t.trim()) {
       localStorage.setItem('jwt_token', t);
     } else {
-      // evita salvar "undefined" / "null" como string
       localStorage.removeItem('jwt_token');
     }
   } catch {}
